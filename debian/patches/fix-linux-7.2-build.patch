@@ -1,0 +1,54 @@
+diff --git a/src/PCIE/driver_fw/driver/aic8800/aic8800_fdrv/rwnx_main.c b/src/PCIE/driver_fw/driver/aic8800/aic8800_fdrv/rwnx_main.c
+index 410b76c..77d18fb 100644
+--- a/src/PCIE/driver_fw/driver/aic8800/aic8800_fdrv/rwnx_main.c
++++ b/src/PCIE/driver_fw/driver/aic8800/aic8800_fdrv/rwnx_main.c
+@@ -4019,7 +4019,11 @@ rwnx_cfg80211_remain_on_channel_(struct wiphy *wiphy, struct wireless_dev *wdev,
+ static int
+ rwnx_cfg80211_remain_on_channel(struct wiphy *wiphy, struct wireless_dev *wdev,
+ 								struct ieee80211_channel *chan,
+-								unsigned int duration, u64 *cookie)
++								unsigned int duration, u64 *cookie
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 2, 0)
++								, const u8 *rx_addr
++#endif
++							   )
+ {
+ 	return rwnx_cfg80211_remain_on_channel_(wiphy, wdev, chan, duration, cookie, false);
+ }
+diff --git a/src/SDIO/driver_fw/driver/aic8800/aic8800_fdrv/rwnx_main.c b/src/SDIO/driver_fw/driver/aic8800/aic8800_fdrv/rwnx_main.c
+index 1e2e73d..09fdbf8 100644
+--- a/src/SDIO/driver_fw/driver/aic8800/aic8800_fdrv/rwnx_main.c
++++ b/src/SDIO/driver_fw/driver/aic8800/aic8800_fdrv/rwnx_main.c
+@@ -3952,7 +3952,11 @@ rwnx_cfg80211_remain_on_channel_(struct wiphy *wiphy, struct wireless_dev *wdev,
+ static int
+ rwnx_cfg80211_remain_on_channel(struct wiphy *wiphy, struct wireless_dev *wdev,
+ 								struct ieee80211_channel *chan,
+-								unsigned int duration, u64 *cookie)
++								unsigned int duration, u64 *cookie
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 2, 0)
++								, const u8 *rx_addr
++#endif
++							   )
+ {
+ 	return rwnx_cfg80211_remain_on_channel_(wiphy, wdev, chan, duration, cookie, false);
+ }
+diff --git a/src/USB/driver_fw/drivers/aic8800/aic8800_fdrv/rwnx_main.c b/src/USB/driver_fw/drivers/aic8800/aic8800_fdrv/rwnx_main.c
+index 3245ecf..6a6e3cf 100644
+--- a/src/USB/driver_fw/drivers/aic8800/aic8800_fdrv/rwnx_main.c
++++ b/src/USB/driver_fw/drivers/aic8800/aic8800_fdrv/rwnx_main.c
+@@ -4754,7 +4754,11 @@ rwnx_cfg80211_remain_on_channel(struct wiphy *wiphy,
+                             #if LINUX_VERSION_CODE < KERNEL_VERSION(3, 8, 0)
+                                 enum nl80211_channel_type channel_type,
+                             #endif
+-                                unsigned int duration, u64 *cookie)
++                                unsigned int duration, u64 *cookie
++                            #if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 2, 0)
++								, const u8 *rx_addr
++                            #endif
++							   )
+ {
+ 	return rwnx_cfg80211_remain_on_channel_(wiphy,
+                             #if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 6, 0)
+-- 
+2.55.0
+
